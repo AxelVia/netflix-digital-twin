@@ -1,5 +1,5 @@
 """
-Starbucks SEC Data Collector
+Netflix SEC Data Collector
 Collecte des données financières depuis EDGAR
 """
 
@@ -10,16 +10,16 @@ import time
 from datetime import datetime
 import os
 
-class StarbucksDataCollector:
+class NetflixDataCollector:
     def __init__(self):
         self.base_url = "https://data.sec.gov/api/xbrl/companyfacts"
         self.headers = {
             'User-Agent': 'AxelVia aviard.work@gmail.com'  # Requis par SEC
         }
-        self.cik = "0000829224" 
+        self.cik = "0001065280"  # Netflix CIK
         
     def get_company_facts(self):
-        """Récupère toutes les données financières Starbucks"""
+        """Récupère toutes les données financières Netflix"""
         url = f"{self.base_url}/CIK{self.cik}.json"
         
         try:
@@ -31,19 +31,20 @@ class StarbucksDataCollector:
             return None
     
     def extract_key_metrics(self, company_facts):
-        """Extrait les métriques clés"""
+        """Extrait les métriques clés Netflix"""
         if not company_facts:
             return None
             
         facts = company_facts['facts']['us-gaap']
         
-        # Métriques à extraire
+        # Métriques Netflix spécifiques
         metrics = {
             'Revenues': 'Revenues',
             'NetIncomeLoss': 'NetIncomeLoss', 
             'Assets': 'Assets',
             'StockholdersEquity': 'StockholdersEquity',
-            'OperatingIncomeLoss': 'OperatingIncomeLoss'
+            'OperatingIncomeLoss': 'OperatingIncomeLoss',
+            'CostOfRevenue': 'CostOfRevenue'
         }
         
         data = []
@@ -65,10 +66,10 @@ class StarbucksDataCollector:
         
         return pd.DataFrame(data)
     
-    def get_store_count_data(self, company_facts):
-        """Extrait les données de nombre de magasins depuis les filings"""
-        # Cette fonction nécessitera du parsing des 10-K pour les détails géographiques
-        # Pour l'instant, on retourne une structure vide
+    def extract_segment_data(self, company_facts):
+        """Extrait données par segment géographique si disponibles"""
+        # Netflix peut avoir des données de revenus par région
+        # Cette fonction sera développée selon la structure des données
         return pd.DataFrame()
     
     def save_data(self, df, filename):
@@ -79,8 +80,8 @@ class StarbucksDataCollector:
         print(f"Données sauvées: {filepath}")
     
     def collect_all_data(self):
-        """Collecte complète des données"""
-        print("Collecte des données SEC pour Starbucks...")
+        """Collecte complète des données Netflix"""
+        print("Collecte des données SEC pour Netflix...")
         
         # Récupération des facts
         company_facts = self.get_company_facts()
@@ -93,7 +94,7 @@ class StarbucksDataCollector:
         financial_df = self.extract_key_metrics(company_facts)
         
         if financial_df is not None and not financial_df.empty:
-            self.save_data(financial_df, 'starbucks_financial_metrics.csv')
+            self.save_data(financial_df, 'netflix_financial_metrics.csv')
             print(f"Collecté {len(financial_df)} points de données financières")
             
             # Résumé par année
@@ -103,11 +104,11 @@ class StarbucksDataCollector:
                 print(summary['Revenues'].dropna().tail(10))
         
         # Sauvegarde des données brutes
-        with open('data/raw/financial/starbucks_raw_facts.json', 'w') as f:
+        with open('data/raw/financial/netflix_raw_facts.json', 'w') as f:
             json.dump(company_facts, f, indent=2)
         
         return financial_df
 
 if __name__ == "__main__":
-    collector = StarbucksDataCollector()
+    collector = NetflixDataCollector()
     data = collector.collect_all_data()
