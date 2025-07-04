@@ -1,0 +1,20 @@
+# Environnement virtuel
+venv/
+env/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Données sensibles
+data/raw/*
+!data/raw/.gitkeep
+.env
+
+# IDE
+.vscode/
+.idea/
+
+# Jupyter
+.ipynb_checkpoints/
