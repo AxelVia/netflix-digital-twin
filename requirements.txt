@@ -5,3 +5,5 @@ beautifulsoup4>=4.11.0
 edgar>=5.0.0
 streamlit>=1.25.0
 scikit-learn>=1.1.0
+matplotlib>=3.5.0
+seaborn>=0.11.0
