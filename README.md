@@ -1,6 +1,6 @@
-# Starbucks Digital Twin
+# Netflix Digital Twin
 
-Simulation bayésienne pour stratégies d'expansion Starbucks.
+Simulation bayésienne pour stratégies d'expansion Netflix.
 
 ## Installation
 ```bash
